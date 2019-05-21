@@ -54,7 +54,11 @@ class Vehicle:
 
 if __name__ == '__main__':
 
-    right = WheelsLine([40, 38], [16,18])
-    right.forward(2)
-    right.forward(2)
+    rights = Wheel(16,18)
+    rights.forward(5)
+    rights.backward(5)
+
+    # right = WheelsLine([40, 38], [16,18])
+    # right.forward(2)
+    # right.forward(2)
     GPIO.cleanup()
