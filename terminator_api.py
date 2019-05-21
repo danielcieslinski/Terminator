@@ -2,7 +2,9 @@ import RPi.GPIO as GPIO
 from time import sleep
 import threading
 
-class Wheel:
+
+
+class WheelsLine:
     def __init__(self, forward_pin, backward_pin):
         self.forward_pin = forward_pin
         self.backward_pin = backward_pin
@@ -23,42 +25,34 @@ class Wheel:
     def __del__(self):
         GPIO.cleanup()
 
-class WheelsLine:
-    def __init__(self, front_pins, rear_pins):
-        self.front_wheel = Wheel(front_pins[0], front_pins[1])
-        self.rear_wheel = Wheel(rear_pins[0], rear_pins[1])
-
-    def forward(self, duration):
-        th1 = threading.Thread(target=self.front_wheel.forward, args=(duration,))
-        th2 = threading.Thread(target=self.rear_wheel.forward, args=(duration,))
-        th1.start()
-        th2.start()
-        sleep(duration)
-
-    def backward(self, duration):
-        th1 = threading.Thread(target=self.front_wheel.backward, args=(duration,))
-        th2 = threading.Thread(target=self.rear_wheel.backward, args=(duration,))
-        th1.start()
-        th2.start()
-        sleep(duration)
-
-    def __del__(self):
-        del self.front_wheel, self.rear_wheel
-
 class Vehicle:
     def __init__(self, right_pins, left_pins):
-        """
-        :param right_pins: [ [front_forward_pin, front_backward_pin], [rear_forward_pin, rear_backward_pin]
-        :param left_pins:
-        """
+        self.right_wheels = WheelsLine(right_pins[0], right_pins[1])
+        self.left_wheels = WheelsLine(left_pins[0], left_pins[1])
+
+    def forward(self, duration):
+        ths = [threading.Thread(target=line.forward, args=(duration,)) for line in [self.left_wheels, self.right_wheels] ]
+        for th in ths: th.start()
+        for th in ths: th.join()
+
+    def backward(self, duration):
+        ths = [threading.Thread(target=line.forward, args=(duration,)) for line in [self.left_wheels, self.right_wheels] ]
+        for th in ths: th.start()
+        for th in ths: th.join()
+
+    def turn_left(self, duration):
+        self.right_wheels.forward(duration)
+
+    def turn_right(self, duration):
+        self.left_wheels.forward(duration)
+
+    def __del__(self):
+        del self.right_wheels, self.left_wheels
+
 
 if __name__ == '__main__':
 
-    rights = Wheel(16,18)
-    rights.forward(5)
-    rights.backward(5)
+    vehicle = Vehicle([16,18], [38,40])
+    vehicle.forward(5)
 
-    # right = WheelsLine([40, 38], [16,18])
-    # right.forward(2)
-    # right.forward(2)
     GPIO.cleanup()
