@@ -49,8 +49,31 @@ class Vehicle:
     def __del__(self):
         del self.right_wheels, self.left_wheels
 
+class Sensor:
+    def __init__(self, pin, sensor_type):
+        self.pin = pin
+        self.sensor_type = type
+        GPIO.setmode(GPIO.BOARD)  # Set GPIO by numbers
+        GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    def check(self):
+        return (GPIO.input(self.pin) == 0)
+
+    def loop(self):
+        while True:
+            if (self.check()):
+                print("{}: Detected".format(self.sensor_type))
+            else: print("{}: ----".format(self.sensor_type))
+
+    def __del__(self):
+        GPIO.cleanup()
 
 if __name__ == '__main__':
+
+    # sensor = Sensor()
+    #
+    # try: oas.loop()
+    # except: GPIO.cleanup()
 
     vehicle = Vehicle([16,18], [38,40])
     vehicle.forward(5)
