@@ -41,10 +41,14 @@ class Vehicle:
         for th in ths: th.join()
 
     def turn_left(self, duration):
-        self.right_wheels.forward(duration)
+        ths = [threading.Thread(target=line, args=(duration,)) for line in [ self.left_wheels.backward, self.right_wheels.forward ] ]
+        for th in ths: th.start()
+        for th in ths: th.join()
 
     def turn_right(self, duration):
-        self.left_wheels.forward(duration)
+        ths = [threading.Thread(target=line, args=(duration,)) for line in [ self.left_wheels.forward, self.right_wheels.backward ] ]
+        for th in ths: th.start()
+        for th in ths: th.join()
 
     def __del__(self):
         del self.right_wheels, self.left_wheels
