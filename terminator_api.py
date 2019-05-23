@@ -111,11 +111,36 @@ class HCSensor:
             print("Measurement stopped by User")
             GPIO.cleanup()
 
+class Fan:
+    def __init__(self, forward_pin, backward_pin):
+        self.forward_pin = forward_pin
+        self.backward_pin = backward_pin
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(self.forward_pin, GPIO.OUT)
+        GPIO.setup(self.backward_pin, GPIO.OUT)
+
+    def forward(self, duration):
+        GPIO.output(self.forward_pin, GPIO.HIGH)
+        sleep(duration)
+        GPIO.output(self.forward_pin, GPIO.LOW)
+
+    def backward(self, duration):
+        GPIO.output(self.backward_pin, GPIO.HIGH)
+        sleep(duration)
+        GPIO.output(self.backward_pin, GPIO.LOW)
+
+    def __del__(self):
+        GPIO.cleanup()
+
+
 if __name__ == '__main__':
 
     # Sensor(32, )
-    sens = HCSensor()
-    sens.loop(0.5)
+    # sens = HCSensor()
+    # sens.loop(0.5)
+
+    fan = Fan(FAN_FORWARD, FAN_BACKWARD)
+    fan.forward(3)
 
     # sensor = Sensor()
     #
