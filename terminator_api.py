@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
-from time import sleep
+from time import sleep, time
 import threading
-
+from constants import *
 
 
 class WheelsLine:
@@ -36,7 +36,7 @@ class Vehicle:
         for th in ths: th.join()
 
     def backward(self, duration):
-        ths = [threading.Thread(target=line.forward, args=(duration,)) for line in [self.left_wheels, self.right_wheels] ]
+        ths = [threading.Thread(target=line.backward, args=(duration,)) for line in [self.left_wheels, self.right_wheels] ]
         for th in ths: th.start()
         for th in ths: th.join()
 
@@ -56,7 +56,7 @@ class Vehicle:
 class Sensor:
     def __init__(self, pin, sensor_type):
         self.pin = pin
-        self.sensor_type = type
+        self.sensor_type = sensor_type
         GPIO.setmode(GPIO.BOARD)  # Set GPIO by numbers
         GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -72,14 +72,57 @@ class Sensor:
     def __del__(self):
         GPIO.cleanup()
 
+class HCSensor:
+    def __init__(self):
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(TRIGGER_PIN, GPIO.OUT)
+        GPIO.setup(ECHO_PIN, GPIO.IN)
+
+    def distance(self):
+        GPIO.output(TRIGGER_PIN, True)
+        # set Trigger after 0.01ms to LOW
+        sleep(0.00001)
+        GPIO.output(TRIGGER_PIN, False)
+
+        StartTime = time()
+        StopTime = time()
+
+        while GPIO.input(ECHO_PIN) == 0:
+            StartTime = time()
+
+        while GPIO.input(ECHO_PIN) == 1:
+            StopTime = time()
+
+        TimeElapsed = StopTime - StartTime
+        distance = (TimeElapsed * 34300) / 2
+
+        return distance
+
+    def loop(self, interval):
+        try:
+            while True:
+                dist = self.distance()
+                print("Measured Distance = %.1f cm" % dist)
+                sleep(interval)
+
+            # Reset by pressing CTRL + C
+        except KeyboardInterrupt:
+            print("Measurement stopped by User")
+            GPIO.cleanup()
+
 if __name__ == '__main__':
+
+    # Sensor(32, )
+    sens = HCSensor()
+    sens.loop(0.5)
 
     # sensor = Sensor()
     #
     # try: oas.loop()
     # except: GPIO.cleanup()
 
-    vehicle = Vehicle([16,18], [38,40])
-    vehicle.forward(5)
+    # vehicle = Vehicle([16,18], [40,38])
+    # vehicle.forward(5)
 
     GPIO.cleanup()
