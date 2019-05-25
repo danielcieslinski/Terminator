@@ -22,11 +22,13 @@ class Daemon:
         while True:
             self.vehicle.turn_right(0.01)
             if self.flame_sensor.check():
+                print("found")
                 return
 
     def drive_while_can(self):
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
             self.vehicle.forward(0.02)
+            print("Driving forward")
 
         return self.flame_sensor.check()
 
