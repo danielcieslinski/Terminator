@@ -27,10 +27,10 @@ class Vehicle:
         self.left_wheels = Controller(left_pins[0], left_pins[1])
 
     def forward(self, duration):
-        return self.__run(duration, [self.left_wheels, self.right_wheels])
+        return self.__run(duration, [self.left_wheels.forward, self.right_wheels.backward])
 
     def backward(self, duration):
-        return self.__run(duration, [self.left_wheels, self.right_wheels])
+        return self.__run(duration, [self.left_wheels.backward, self.right_wheels.backward])
 
     def turn_left(self, duration):
         return self.__run(duration, [self.left_wheels.backward, self.right_wheels.forward])
