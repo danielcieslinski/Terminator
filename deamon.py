@@ -30,12 +30,14 @@ class Daemon:
         sleep(1)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
             while self.hc_sensor.distance() > NULL_DISTANCE:
+                print("more")
                 if not self.turn:
                     self.vehicle.turn_right(0.05)
                 else: self.vehicle.turn_left(0.05)
-                self.turn = not self.turn
 
+            print("quiting")
 
+            self.turn = not self.turn
             self.vehicle.forward(0.1)
             print("Driving forward")
 
