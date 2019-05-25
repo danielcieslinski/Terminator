@@ -29,6 +29,7 @@ class Daemon:
     def drive_while_can(self):
         sleep(1)
         self.vehicle.forward(0.1)
+        self.vehicle.turn_right(0.2)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
             while self.hc_sensor.distance() > NULL_DISTANCE:
                 print("more")
@@ -46,8 +47,8 @@ class Daemon:
 
     def extinguish(self):
         print("extuinsds")
-        self.fan.forward(5)
-        self.vehicle.backward(0.1)
+        self.fan.forward(8)
+        self.vehicle.backward(0.4)
         self.vehicle.turn_left(0.3)
         self.turn = not self.turn
 
