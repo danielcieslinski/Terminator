@@ -5,13 +5,13 @@ from constants import *
 CANDLE_DISTANCE = 15
 NULL_DISTANCE = 40
 
-
 class Daemon:
     def __init__(self):
         self.vehicle = Vehicle((RIGHT_FORWARD, RIGHT_BACKWARD), (LEFT_FORWARD, LEFT_BACKWARD))
         self.fan = Controller(FAN_FORWARD, FAN_BACKWARD)
         self.hc_sensor = HCSensor(TRIGGER_PIN, ECHO_PIN)
         self.flame_sensor = Sensor(FLAME_PIN)
+        self.turn = 0 #0 is last was left 1 is last was right
 
     def loop(self):
         while True:
@@ -29,10 +29,14 @@ class Daemon:
     def drive_while_can(self):
         sleep(1)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
-            if self.hc_sensor.distance() > NULL_DISTANCE:
-                self.vehicle.turn_right(0.01)
+            while self.hc_sensor.distance() > NULL_DISTANCE:
+                if not self.turn:
+                    self.vehicle.turn_right(0.05)
+                else: self.vehicle.turn_left(0.05)
+                self.turn = not self.turn
 
-            self.vehicle.forward(0.01)
+
+            self.vehicle.forward(0.1)
             print("Driving forward")
 
         return self.flame_sensor.check()
