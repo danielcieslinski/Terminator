@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from terminator_api import *
 from constants import *
 
-CANDLE_DISTANCE = 15
+CANDLE_DISTANCE = 10
 NULL_DISTANCE = 30
 
 class Daemon:
@@ -42,9 +42,10 @@ class Daemon:
 
     def extinguish(self):
         print("extuinsds")
-        self.fan.forward(8)
-        self.vehicle.backward(0.5)
+        self.fan.forward(10)
+        self.vehicle.backward(0.7)
         self.vehicle.turn_left(0.3)
+        sleep(1)
 
 
 if __name__ == '__main__':
