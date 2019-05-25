@@ -75,7 +75,7 @@ class Sensor:
 class HCSensor:
     def __init__(self):
 
-        GPIO.setmode(GPIO.BCM)
+        GPIO.setmode(GPIO.BOARD)
         GPIO.setup(TRIGGER_PIN, GPIO.OUT)
         GPIO.setup(ECHO_PIN, GPIO.IN)
 
