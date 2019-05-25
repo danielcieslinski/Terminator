@@ -3,7 +3,7 @@ from terminator_api import *
 from constants import *
 
 CANDLE_DISTANCE = 15
-NULL_DISTANCE = 40
+NULL_DISTANCE = 70
 
 class Daemon:
     def __init__(self):
