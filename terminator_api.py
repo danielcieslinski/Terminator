@@ -139,10 +139,10 @@ if __name__ == '__main__':
     # sens = HCSensor()
     # sens.loop(0.5)
 
-    fan = Fan(FAN_FORWARD, FAN_BACKWARD)
-    fan.forward(3)
+    # fan = Fan(FAN_FORWARD, FAN_BACKWARD)
+    # fan.forward(3)
 
-    # sensor = Sensor()
+    sensor = Sensor(FLAME_PIN, "Flame")
     #
     # try: oas.loop()
     # except: GPIO.cleanup()
