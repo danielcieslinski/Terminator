@@ -22,7 +22,6 @@ class Daemon:
         while True:
             self.vehicle.turn_right(0.01)
             if self.flame_sensor.check():
-                print("found")
                 return
 
     def drive_while_can(self):
@@ -33,15 +32,11 @@ class Daemon:
             while self.hc_sensor.distance() > NULL_DISTANCE:
                     self.vehicle.turn_right(0.05)
 
-            print("quiting")
-
             self.vehicle.forward(0.05)
-            print("Driving forward")
 
         return self.flame_sensor.check()
 
     def extinguish(self):
-        print("extuinsds")
         self.fan.forward(10)
         self.vehicle.backward(0.3)
         self.vehicle.turn_left(0.3)
