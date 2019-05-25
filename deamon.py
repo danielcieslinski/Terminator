@@ -9,7 +9,7 @@ class Daemon:
     def __init__(self):
         self.vehicle = Vehicle((RIGHT_FORWARD, RIGHT_BACKWARD), (LEFT_FORWARD, LEFT_BACKWARD))
         self.fan = Controller(FAN_FORWARD, FAN_BACKWARD)
-        self.hc_sensor = HCSensor(ECHO_PIN, TRIGGER_PIN)
+        self.hc_sensor = HCSensor(TRIGGER_PIN, ECHO_PIN)
         self.flame_sensor = Sensor(FLAME_PIN)
 
     def loop(self):

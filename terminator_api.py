@@ -75,7 +75,7 @@ class HCSensor:
 
     def distance(self):
         GPIO.output(self.trigger_pin, True)
-        sleep(0.00001)
+        sleep(0.0001)
         GPIO.output(self.trigger_pin, False)
 
         start_time = time()
@@ -85,7 +85,7 @@ class HCSensor:
             start_time = time()
 
         while GPIO.input(self.echo_pin) == 1:
-            start_time = time()
+            stop_time = time()
 
         time_elapsed = stop_time - start_time
         distance = (time_elapsed * 34300) / 2
