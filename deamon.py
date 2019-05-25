@@ -31,6 +31,7 @@ class Daemon:
         return self.flame_sensor.check()
 
     def extinguish(self):
+        print("extuinsds")
         self.fan.forward(5)
         self.vehicle.backward(1)
 
