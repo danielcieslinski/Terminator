@@ -39,7 +39,7 @@ class Daemon:
             print("quiting")
 
             self.turn = not self.turn
-            self.vehicle.forward(0.1)
+            self.vehicle.forward(0.05)
             print("Driving forward")
 
         return self.flame_sensor.check()
@@ -49,6 +49,7 @@ class Daemon:
         self.fan.forward(5)
         self.vehicle.backward(0.1)
         self.vehicle.turn_left(0.3)
+        self.turn = not self.turn
 
 
 if __name__ == '__main__':
