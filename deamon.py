@@ -56,5 +56,6 @@ if __name__ == '__main__':
     daemon = Daemon()
     try:
         daemon.loop()
-    except:
+    except Exception as e:
+        print(e)
         GPIO.cleanup()
