@@ -3,6 +3,7 @@ from terminator_api import *
 from constants import *
 
 CANDLE_DISTANCE = 15
+NULL_DISTANCE = 40
 
 
 class Daemon:
@@ -27,10 +28,11 @@ class Daemon:
 
     def drive_while_can(self):
         sleep(1)
-        self.vehicle.turn_right(0.1)
-        sleep(1)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
-            self.vehicle.forward(0.1)
+            if self.hc_sensor.distance() > NULL_DISTANCE:
+                self.vehicle.turn_right(0.01)
+
+            self.vehicle.forward(0.01)
             print("Driving forward")
 
         return self.flame_sensor.check()
@@ -38,7 +40,8 @@ class Daemon:
     def extinguish(self):
         print("extuinsds")
         self.fan.forward(5)
-        self.vehicle.backward(0.2)
+        self.vehicle.backward(0.1)
+        self.vehicle.turn_left(0.3)
 
 
 if __name__ == '__main__':
