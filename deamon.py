@@ -27,6 +27,8 @@ class Daemon:
 
     def drive_while_can(self):
         sleep(1)
+        self.vehicle.turn_right(0.1)
+        sleep(1)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
             self.vehicle.forward(0.1)
             print("Driving forward")
