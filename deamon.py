@@ -11,7 +11,6 @@ class Daemon:
         self.fan = Controller(FAN_FORWARD, FAN_BACKWARD)
         self.hc_sensor = HCSensor(TRIGGER_PIN, ECHO_PIN)
         self.flame_sensor = Sensor(FLAME_PIN)
-        self.turn = 0 #0 is last was left 1 is last was right
 
     def loop(self):
         while True:
@@ -29,17 +28,13 @@ class Daemon:
     def drive_while_can(self):
         sleep(1)
         self.vehicle.forward(0.1)
-        self.vehicle.turn_right(0.2)
+        self.vehicle.turn_right(0.3)
         while self.hc_sensor.distance() > CANDLE_DISTANCE and self.flame_sensor.check():
             while self.hc_sensor.distance() > NULL_DISTANCE:
-                print("more")
-                if not self.turn:
                     self.vehicle.turn_right(0.05)
-                else: self.vehicle.turn_left(0.05)
 
             print("quiting")
 
-            self.turn = not self.turn
             self.vehicle.forward(0.05)
             print("Driving forward")
 
@@ -48,9 +43,8 @@ class Daemon:
     def extinguish(self):
         print("extuinsds")
         self.fan.forward(8)
-        self.vehicle.backward(0.4)
+        self.vehicle.backward(0.5)
         self.vehicle.turn_left(0.3)
-        self.turn = not self.turn
 
 
 if __name__ == '__main__':
